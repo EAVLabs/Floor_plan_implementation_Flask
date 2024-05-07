@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Processing</title>
+</head>
+<body>
+    <h1>Video Processing</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Process Video">
+    </form>
+
+    {% if filename %}
+    <h2>Original Video</h2>
+    <img src="{{ url_for('video_feed', mode='original', filename=filename) }}" style="width: 640px; height: 360px;">
+
+    <h2>Processed Video</h2>
+    <img src="{{ url_for('video_feed', mode='grayscale', filename=filename) }}" style="width: 640px; height: 360px;">
+    {% endif %}
+</body>
+</html>
