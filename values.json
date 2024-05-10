@@ -1,0 +1,60 @@
+{
+	"user_id": "id",
+	"location_id": "id",
+	"frames": [
+		{
+			"frame_id": "frame1",
+			"url": "string (url for image frame)",
+			"meta_data": {
+				"timestamp": "timestamp",
+				"camera_position": {
+					"x": "1.002",
+					"y": "1.002",
+					"z": "1.002"
+				},
+				"camera_orientation": {
+					"q1": "1.002",
+					"q2": "1.002",
+					"q3": "1.002",
+					"q4": "1.002"
+				}
+			}
+		},
+		{
+			"frame_id": "frame2",
+			"url": "string (url for image frame)",
+			"meta_data": {
+				"timestamp": "timestamp",
+				"camera_position": {
+					"x": "1.002",
+					"y": "1.002",
+					"z": "1.002"
+				},
+				"camera_orientation": {
+					"q1": "1.002",
+					"q2": "1.002",
+					"q3": "1.002",
+					"q4": "1.002"
+				}
+			}
+		},
+		{
+			"frame_id": "frame3",
+			"url": "string (url for image frame)",
+			"meta_data": {
+				"timestamp": "timestamp",
+				"camera_position": {
+					"x": "1.002",
+					"y": "1.002",
+					"z": "1.002"
+				},
+				"camera_orientation": {
+					"q1": "1.002",
+					"q2": "1.002",
+					"q3": "1.002",
+					"q4": "1.002"
+				}
+			}
+		}
+	]
+}
