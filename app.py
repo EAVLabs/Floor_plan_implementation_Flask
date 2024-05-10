@@ -12,7 +12,6 @@ app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # Max upload: 50 MB
 app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov'}
 
 def allowed_file(filename):
-    """ Check if the file extension is allowed. """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def process_video(file_path, frame_data):
@@ -21,14 +20,36 @@ def process_video(file_path, frame_data):
         clip = VideoFileClip(file_path)
         duration = clip.duration  # Duration in seconds
         clip.close()
-        # Additional processing logic can be based on frame_data
         return {"status": "success", "duration": duration}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+def is_float(value):
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
+def validate_camera_data(frame_data):
+    """Validate camera position and orientation to ensure all are float values."""
+    for frame in frame_data.get('frames', []):
+        camera_position = frame['meta_data'].get('camera_position', {})
+        camera_orientation = frame['meta_data'].get('camera_orientation', {})
+        
+        # Check all required camera position and orientation fields
+        for key in ['x', 'y', 'z']:
+            if not is_float(camera_position.get(key)):
+                return False, f"Camera position {key} is not a float"
+        
+        for key in ['q1', 'q2', 'q3', 'q4']:
+            if not is_float(camera_orientation.get(key)):
+                return False, f"Camera orientation {key} is not a float"
+    
+    return True, "Validation successful"
+
 @app.route('/upload_video', methods=['POST'])
 def upload_video():
-    """ Endpoint to upload a video and process it along with JSON data. """
     if 'file' not in request.files or 'data' not in request.form:
         return jsonify({'error': 'Missing file or data'}), 400
     
@@ -42,7 +63,9 @@ def upload_video():
 
     try:
         frame_data = json.loads(data)
-        # print(frame_data)
+        valid, message = validate_camera_data(frame_data)
+        if not valid:
+            return jsonify({'error': 'Invalid data', 'message': message}), 422
     except json.JSONDecodeError:
         return jsonify({'error': 'Invalid JSON data'}), 400
 
@@ -58,7 +81,7 @@ def upload_video():
             'message': 'File uploaded and processed successfully',
             'filename': filename,
             'result': result,
-            # 'input_data': frame_data  # Echoing back the input data for verification
+            'input_data': frame_data  # Returning the input data
         }), 201
     else:
         return jsonify({'error': 'File type not allowed'}), 400
