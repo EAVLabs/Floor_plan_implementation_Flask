@@ -1,0 +1,8 @@
+{
+    "master_key": "MASTER_SECRET_KEY",
+    "keys": {
+        "secret_api_key": [
+            "process_data"
+        ]
+    }
+}
